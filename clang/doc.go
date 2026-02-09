@@ -2,5 +2,5 @@
 package clang
 
 import (
-	_ "github.com/go-clang/clang-v15/clang/clang-c"
+	_ "github.com/kleoer/clang-v15/clang/clang-c"
 )

@@ -137,3 +137,35 @@ func (c Cursor) Visit(visitor CursorVisitor) bool {
 
 	return o == C.uint(0)
 }
+
+// GetObjCSuperClass gets the superclass of an Objective-C class
+// For ObjCInterfaceDecl and ObjCImplementationDecl, returns the Cursor of its superclass
+// Returns a null cursor if there is no superclass or an error occurs
+func (c Cursor) GetObjCSuperClass() Cursor {
+	var superClass Cursor
+
+	// Traverse child nodes to find ObjCSuperClassRef
+	c.Visit(func(child, parent Cursor) ChildVisitResult {
+		if child.Kind() == Cursor_ObjCSuperClassRef {
+			// Get the declaration pointed to by the superclass reference
+			referenced := child.Referenced()
+			if !referenced.IsNull() {
+				superClass = referenced
+				return ChildVisit_Break
+			}
+		}
+		return ChildVisit_Continue
+	})
+
+	return superClass
+}
+
+// GetObjCSuperClassName gets the superclass name of an Objective-C class
+// Returns the superclass name, or empty string if there is no superclass
+func (c Cursor) GetObjCSuperClassName() string {
+	superClass := c.GetObjCSuperClass()
+	if superClass.IsNull() {
+		return ""
+	}
+	return superClass.Spelling()
+}

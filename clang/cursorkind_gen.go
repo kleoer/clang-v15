@@ -348,6 +348,15 @@ const (
 	Cursor_ConceptSpecializationExpr = C.CXCursor_ConceptSpecializationExpr
 	// Cursor_RequiresExpr expression that references a C++20 concept.
 	Cursor_RequiresExpr = C.CXCursor_RequiresExpr
+	// Cursor_ObjCPropertyRefExpr represents an Objective-C property reference expression.
+	// This is used when accessing a property via dot syntax or subscript,
+	// which can be used for both getter and setter operations.
+	Cursor_ObjCPropertyRefExpr = C.CXCursor_ObjCPropertyRefExpr
+	// Cursor_PseudoObjectExpr represents a pseudo-object expression.
+	// This represents a language construct that looks like an expression but
+	// may have side effects or special evaluation rules. Used for
+	// Objective-C property access and other similar constructs.
+	Cursor_PseudoObjectExpr = C.CXCursor_PseudoObjectExpr
 	// Cursor_LastExpr expression that references a C++20 concept.
 	Cursor_LastExpr = C.CXCursor_LastExpr
 	// Cursor_FirstStmt expression that references a C++20 concept.

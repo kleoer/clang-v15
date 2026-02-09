@@ -1030,19 +1030,6 @@ CINDEX_LINKAGE CXString clang_getDiagnosticOption(CXDiagnostic Diag,
 CINDEX_LINKAGE unsigned clang_getDiagnosticCategory(CXDiagnostic);
 
 /**
- * Retrieve the name of a particular diagnostic category.  This
- *  is now deprecated.  Use clang_getDiagnosticCategoryText()
- *  instead.
- *
- * \param Category A diagnostic category number, as returned by
- * \c clang_getDiagnosticCategory().
- *
- * \returns The name of the given diagnostic category.
- */
-CINDEX_DEPRECATED CINDEX_LINKAGE CXString
-clang_getDiagnosticCategoryName(unsigned Category);
-
-/**
  * Retrieve the diagnostic category text for a given diagnostic.
  *
  * \returns The text of the given diagnostic category.
@@ -2201,7 +2188,24 @@ enum CXCursorKind {
    */
   CXCursor_RequiresExpr = 154,
 
-  CXCursor_LastExpr = CXCursor_RequiresExpr,
+  /**
+   * Objective-C property reference expression.
+   *
+   * This represents accessing a property via dot syntax or subscript,
+   * which can be used for both getter and setter operations.
+   */
+  CXCursor_ObjCPropertyRefExpr = 155,
+
+  /**
+   * Pseudo-object expression.
+   *
+   * Represents a language construct that looks like an expression but
+   * may have side effects or special evaluation rules. Used for
+   * Objective-C property access and other similar constructs.
+   */
+  CXCursor_PseudoObjectExpr = 156,
+
+  CXCursor_LastExpr = CXCursor_PseudoObjectExpr,
 
   /* Statements */
   CXCursor_FirstStmt = 200,

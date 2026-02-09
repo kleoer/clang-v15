@@ -48,6 +48,48 @@ func (t Type) IsConstQualifiedType() bool {
 	return o != C.uint(0)
 }
 
+// GetPointeeType gets the type pointed to by a pointer
+// Corresponds to C API: clang_getPointeeType(CXType T)
+func (t Type) GetPointeeType() Type {
+	return Type{C.clang_getPointeeType(t.c)}
+}
+
+// GetArrayElementType gets the element type of an array
+// Corresponds to C API: clang_getArrayElementType(CXType T)
+func (t Type) GetArrayElementType() Type {
+	return Type{C.clang_getArrayElementType(t.c)}
+}
+
+// GetArraySize gets the size of an array
+// Corresponds to C API: clang_getArraySize(CXType T)
+func (t Type) GetArraySize() uint64 {
+	return uint64(C.clang_getArraySize(t.c))
+}
+
+// GetObjCObjectBaseType gets the base type of an Objective-C object
+// Corresponds to C API: clang_Type_getObjCObjectBaseType(CXType T)
+func (t Type) GetObjCObjectBaseType() Type {
+	return Type{C.clang_Type_getObjCObjectBaseType(t.c)}
+}
+
+// GetNumObjCProtocolRefs gets the number of protocols implemented by an Objective-C object
+// Corresponds to C API: clang_Type_getNumObjCProtocolRefs(CXType T)
+func (t Type) GetNumObjCProtocolRefs() uint32 {
+	return uint32(C.clang_Type_getNumObjCProtocolRefs(t.c))
+}
+
+// GetObjCProtocolDecl gets the protocol declaration implemented by an Objective-C object
+// Corresponds to C API: clang_Type_getObjCProtocolDecl(CXType T, unsigned i)
+func (t Type) GetObjCProtocolDecl(i uint32) Cursor {
+	return Cursor{C.clang_Type_getObjCProtocolDecl(t.c, C.unsigned(i))}
+}
+
+// GetNamedType gets the named type (from elaborated type)
+// Corresponds to C API: clang_Type_getNamedType(CXType T)
+func (t Type) GetNamedType() Type {
+	return Type{C.clang_Type_getNamedType(t.c)}
+}
+
 // IsVolatileQualifiedType determine whether a CXType has the "volatile" qualifier set, without looking through typedefs that may have added "volatile" at a different level.
 func (t Type) IsVolatileQualifiedType() bool {
 	o := C.clang_isVolatileQualifiedType(t.c)
@@ -73,11 +115,6 @@ func (t Type) DefName() string {
 	defer o.Dispose()
 
 	return o.String()
-}
-
-// GetPointeeType for pointer types, returns the type of the pointee.
-func (t Type) PointeeType() Type {
-	return Type{C.clang_getPointeeType(t.c)}
 }
 
 // GetTypeDeclaration return the cursor for the declaration of the given type.
@@ -129,28 +166,6 @@ func (t Type) NumArgTypes() int32 {
 // parameters, an invalid type is returned.
 func (t Type) ArgType(i uint32) Type {
 	return Type{C.clang_getArgType(t.c, C.uint(i))}
-}
-
-// ObjectBaseType retrieves the base type of the ObjCObjectType.
-//
-// If the type is not an ObjC object, an invalid type is returned.
-func (t Type) ObjectBaseType() Type {
-	return Type{C.clang_Type_getObjCObjectBaseType(t.c)}
-}
-
-// NumObjCProtocolRefs retrieve the number of protocol references associated with an ObjC object/id.
-//
-// If the type is not an ObjC object, 0 is returned.
-func (t Type) NumObjCProtocolRefs() uint32 {
-	return uint32(C.clang_Type_getNumObjCProtocolRefs(t.c))
-}
-
-// ProtocolDecl retrieve the decl for a protocol reference for an ObjC object/id.
-//
-// If the type is not an ObjC object or there are not enough protocol
-// references, an invalid cursor is returned.
-func (t Type) ProtocolDecl(i uint32) Cursor {
-	return Cursor{C.clang_Type_getObjCProtocolDecl(t.c, C.uint(i))}
 }
 
 // NumObjCTypeArgs retrieve the number of type arguments associated with an ObjC object.
